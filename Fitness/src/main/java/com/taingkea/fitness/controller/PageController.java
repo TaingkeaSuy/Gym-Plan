@@ -39,6 +39,10 @@ public class PageController {
                            Model model,
                            RedirectAttributes redirectAttributes) {
 
+        // Always pre-populate so fields survive any validation error
+        model.addAttribute("name", name);
+        model.addAttribute("email", email);
+
         if (name.isBlank() || email.isBlank() || password.isBlank()) {
             model.addAttribute("error", "Please fill in all fields.");
             return "register";
