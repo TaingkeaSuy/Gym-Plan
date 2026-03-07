@@ -3,206 +3,431 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dashboard — FitZone</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <title>Patrick Star Gym – Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --blue: #2563eb; --blue-light: #eff6ff; --blue-dark: #1d4ed8;
+            --text: #111827; --text-2: #6b7280; --text-3: #9ca3af;
+            --border: #e5e7eb; --bg: #ffffff; --bg-2: #f9fafb;
+            --green: #16a34a; --green-light: #f0fdf4;
+            --red: #dc2626; --red-light: #fef2f2;
+            --shadow: 0 1px 3px rgba(0,0,0,.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+        .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 64px; border-bottom: 1px solid var(--border); background: var(--bg); }
+        .logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.02em; text-decoration: none; }
+        .logo span { color: var(--blue); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-user { font-size: 14px; color: var(--text-2); font-weight: 500; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; transition: all .15s; text-decoration: none; }
+        .btn-primary { background: var(--blue); color: #fff; }
+        .btn-primary:hover { background: var(--blue-dark); }
+        .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+        .btn-outline:hover { border-color: #9ca3af; background: var(--bg-2); }
+        .btn-ghost { background: transparent; color: var(--text-2); font-size: 14px; font-weight: 500; border: none; cursor: pointer; font-family: inherit; padding: 8px 12px; border-radius: 6px; }
+        .btn-ghost:hover { background: var(--bg-2); }
+        .btn-danger { background: var(--red); color: #fff; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-sm { padding: 7px 14px; font-size: 13px; }
+        .btn-full { width: 100%; }
+
+        /* Dashboard layout */
+        .dash { max-width: 840px; margin: 0 auto; padding: 36px 24px 64px; }
+        .dash-greeting { font-size: 24px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 24px; }
+        .dash-greeting span { color: var(--blue); }
+        .flash { display: flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; margin-bottom: 24px; }
+        .flash-success { background: var(--green-light); color: var(--green); border: 1px solid #86efac; }
+        .flash-error   { background: var(--red-light);   color: var(--red);   border: 1px solid #fca5a5; }
+
+        /* Status cards */
+        .status-card { border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: var(--shadow); border: 1.5px solid var(--border); }
+        .status-card.state-none { border-style: dashed; text-align: center; padding: 48px 28px; background: var(--bg-2); }
+        .status-card.state-active { border-color: #86efac; background: var(--green-light); }
+        .status-card.state-expired { border-color: #fca5a5; background: var(--red-light); }
+        .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+        .sc-plan-name { font-size: 22px; font-weight: 800; }
+        .sc-badge { padding: 5px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+        .badge-active  { background: #dcfce7; color: var(--green); }
+        .badge-expired { background: #fee2e2; color: var(--red); }
+        .sc-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 22px; }
+        .sc-info-item label { font-size: 12px; color: var(--text-2); font-weight: 500; display: block; margin-bottom: 4px; }
+        .sc-info-item span { font-size: 15px; font-weight: 700; }
+        .sc-big { font-size: 34px; font-weight: 800; color: var(--blue); line-height: 1; }
+        .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-2); margin-bottom: 7px; font-weight: 500; }
+        .progress-bg { background: #e5e7eb; border-radius: 100px; height: 8px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--blue), #60a5fa); }
+        .progress-fill.red { background: linear-gradient(90deg, var(--red), #f87171); }
+        .empty-icon { font-size: 44px; margin-bottom: 12px; }
+        .empty-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+        .empty-sub { font-size: 14px; color: var(--text-2); margin-bottom: 20px; }
+        .section-heading { margin-bottom: 18px; }
+        .section-heading h3 { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
+        .section-heading p { font-size: 13px; color: var(--text-2); }
+
+        /* Carousel */
+        .carousel-outer { position: relative; }
+        .carousel-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 4px 2px 16px; scrollbar-width: none; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .plan-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; flex-shrink: 0; width: 280px; scroll-snap-align: start; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; position: relative; }
+        .plan-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .plan-card.popular { border-color: var(--blue); }
+        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; white-space: nowrap; }
+        .plan-label { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; }
+        .plan-price { font-size: 46px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
+        .plan-price sup { font-size: 22px; vertical-align: top; margin-top: 8px; }
+        .plan-period { font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
+        .plan-save { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 20px; }
+        .plan-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 16px; }
+        .plan-features-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+        .plan-features { list-style: none; flex: 1; margin-bottom: 22px; }
+        .plan-features li { font-size: 14px; color: var(--text-2); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+        .plan-features li:last-child { border-bottom: none; }
+        .plan-features li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+        .carousel-dots { display: flex; justify-content: center; gap: 7px; margin-top: 4px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; padding: 0; transition: all .2s; }
+        .dot.active { background: var(--blue); width: 20px; border-radius: 4px; }
+        .c-arrow { position: absolute; top: 50%; transform: translateY(-60%); width: 34px; height: 34px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text); z-index: 10; box-shadow: var(--shadow); transition: all .15s; }
+        .c-arrow:hover { background: var(--bg-2); }
+        .c-arrow.left { left: -17px; }
+        .c-arrow.right { right: -17px; }
+
+        /* History table */
+        .history-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        .history-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); border-bottom: 1px solid var(--border); }
+        .history-table td { padding: 12px; border-bottom: 1px solid var(--border); }
+        .history-table tr:last-child td { border-bottom: none; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+        .badge-cancelled { background: var(--bg-2); color: var(--text-2); }
+
+        /* Payment Modal */
+        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); }
+        .modal-bg.open { display: flex; }
+        .modal { background: var(--bg); border-radius: 20px; width: 100%; max-width: 460px; box-shadow: 0 20px 60px rgba(0,0,0,.18); position: relative; overflow: hidden; animation: fadeIn .22s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .modal-x { position: absolute; top: 16px; right: 16px; background: var(--bg-2); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-2); z-index: 10; }
+        .steps-bar { display: flex; align-items: center; padding: 20px 28px 0; }
+        .step-item { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .step-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; border: 2px solid var(--border); background: var(--bg); color: var(--text-3); transition: all .3s; }
+        .step-circle.done { background: var(--blue); border-color: var(--blue); color: #fff; }
+        .step-circle.active { border-color: var(--blue); color: var(--blue); }
+        .step-label { font-size: 12px; font-weight: 600; color: var(--text-3); transition: color .3s; }
+        .step-label.active { color: var(--blue); }
+        .step-label.done { color: var(--green); }
+        .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; border-radius: 2px; transition: background .3s; }
+        .step-line.done { background: var(--blue); }
+        .step-panel { display: none; padding: 24px 28px 28px; }
+        .step-panel.active { display: block; }
+        .plan-summary-box { background: var(--blue-light); border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 16px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; }
+        .psb-left .psb-name { font-size: 16px; font-weight: 800; color: var(--text); }
+        .psb-left .psb-period { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+        .psb-price { font-size: 28px; font-weight: 800; color: var(--blue); }
+        .field { margin-bottom: 16px; }
+        .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 7px; }
+        .field input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); outline: none; transition: border-color .15s; }
+        .field input:focus { border-color: var(--blue); }
+        .field input::placeholder { color: var(--text-3); }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card-input-wrap { position: relative; }
+        .card-input-wrap input { padding-right: 56px; letter-spacing: .06em; }
+        .card-brand { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 20px; pointer-events: none; }
+        .secure-note { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-3); margin-top: 16px; justify-content: center; }
+        .order-summary { background: var(--bg-2); border-radius: 12px; padding: 18px; margin-bottom: 22px; }
+        .order-row { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .order-row:last-child { border-bottom: none; font-weight: 800; font-size: 16px; color: var(--blue); padding-bottom: 0; }
+        .order-label { color: var(--text-2); }
+        .card-preview { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; color: #fff; }
+        .card-preview-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card-chip { width: 32px; height: 24px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 4px; }
+        .card-network { font-size: 22px; }
+        .card-number-display { font-size: 16px; letter-spacing: .2em; font-weight: 600; margin-bottom: 14px; font-family: monospace; }
+        .card-bottom { display: flex; justify-content: space-between; }
+        .card-bottom-label { font-size: 10px; opacity: .7; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+        .card-bottom-val { font-size: 13px; font-weight: 600; }
+        .modal-actions { display: flex; gap: 10px; }
+        .modal-actions .btn { flex: 1; padding: 13px; }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
 <!-- NAVBAR -->
-<nav class="navbar bg-white border-bottom px-4">
-    <a class="navbar-brand fw-bold" href="/">FitZone</a>
-    <div class="d-flex align-items-center gap-2">
-        <span class="text-muted small" th:text="'Hi, ' + ${session.user.name}"></span>
-        <a href="/logout" class="btn btn-outline-secondary btn-sm">Sign Out</a>
+<nav class="navbar">
+    <a th:href="@{/}" class="logo">Patrick <span>Star Gym</span></a>
+    <div class="nav-right">
+        <span class="nav-user" th:text="'Hi, ' + ${user.username} + ' 👋'"></span>
+        <form method="post" th:action="@{/logout}" style="margin:0">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn-ghost btn-sm">Sign Out</button>
+        </form>
     </div>
 </nav>
 
-<div class="container py-5" style="max-width:860px">
-
-    <!-- Greeting -->
-    <h4 class="fw-bold mb-4">
-        Hey, <span th:text="${session.user.name.split(' ')[0]}">User</span> 👋
-    </h4>
+<!-- MAIN DASHBOARD -->
+<div class="dash">
+    <div class="dash-greeting">Hey, <span th:text="${user.username}">User</span> 👋</div>
 
     <!-- Flash messages -->
-    <div th:if="${success}" class="alert alert-success alert-dismissible fade show small" th:text="${success}">
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show small" th:text="${error}">
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+    <div th:if="${message}" class="flash flash-success" th:text="${message}"></div>
+    <div th:if="${error}"   class="flash flash-error"   th:text="${error}"></div>
 
-    <!-- ── NO SUBSCRIPTION ── -->
-    <div th:if="${subscription == null}" class="card mb-4">
-        <div class="card-body text-center py-5">
-            <div class="fs-1 mb-2">🏋️</div>
-            <h5 class="fw-bold">No active membership</h5>
-            <p class="text-muted small">Pick a plan below to get started.</p>
+    <!-- ACTIVE subscription card -->
+    <div th:if="${activeSub != null}" class="status-card state-active">
+        <div class="sc-header">
+            <div class="sc-plan-name" th:text="${activeSub.planName} + ' Plan'">Pro Plan</div>
+            <div class="sc-badge badge-active">● Active</div>
+        </div>
+        <div class="sc-info">
+            <div class="sc-info-item"><label>Start Date</label><span th:text="${activeSub.startDate}"></span></div>
+            <div class="sc-info-item"><label>End Date</label><span th:text="${activeSub.endDate}"></span></div>
+            <div class="sc-info-item"><label>Billing</label><span th:text="${activeSub.period}"></span></div>
+        </div>
+        <div style="margin-top:16px;">
+            <form method="post" th:action="@{'/cancel/' + ${activeSub.id}}"
+                  onsubmit="return confirm('Cancel your subscription?')">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-danger btn-sm">Cancel Membership</button>
+            </form>
         </div>
     </div>
 
-    <!-- ── ACTIVE SUBSCRIPTION ── -->
-    <div th:if="${subscription != null and subscription.active}" class="card border-success mb-4">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold mb-0" th:text="${subscription.planName + ' Plan'}"></h5>
-                <span class="badge bg-success">Active</span>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-6">
-                    <p class="text-muted small mb-1">Start Date</p>
-                    <strong class="small" th:text="${#temporals.format(subscription.startDate,'MMM dd, yyyy')}"></strong>
-                </div>
-                <div class="col-6">
-                    <p class="text-muted small mb-1">End Date</p>
-                    <strong class="small" th:text="${#temporals.format(subscription.endDate,'MMM dd, yyyy')}"></strong>
-                </div>
-            </div>
-            <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>Usage</span>
-                <span th:text="${subscription.progressPercent + '%'}"></span>
-            </div>
-            <div class="progress mb-3" style="height:6px">
-                <div class="progress-bar" th:style="'width:' + ${subscription.progressPercent} + '%'"></div>
-            </div>
-            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
-          ⏳ <span th:text="${subscription.daysRemaining}"></span> days remaining
-        </span>
-        </div>
+    <!-- NO subscription card -->
+    <div th:if="${activeSub == null}" class="status-card state-none">
+        <div class="empty-icon">🏋️</div>
+        <div class="empty-title">No Active Membership</div>
+        <div class="empty-sub">Pick a plan below to get started</div>
     </div>
 
-    <!-- ── EXPIRED SUBSCRIPTION ── -->
-    <div th:if="${subscription != null and !subscription.active}" class="card border-danger mb-4">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold mb-0" th:text="${subscription.planName + ' Plan'}"></h5>
-                <span class="badge bg-danger">Expired</span>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-6">
-                    <p class="text-muted small mb-1">Start Date</p>
-                    <strong class="small" th:text="${#temporals.format(subscription.startDate,'MMM dd, yyyy')}"></strong>
-                </div>
-                <div class="col-6">
-                    <p class="text-muted small mb-1">End Date</p>
-                    <strong class="small" th:text="${#temporals.format(subscription.endDate,'MMM dd, yyyy')}"></strong>
-                </div>
-            </div>
-            <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 mb-3">❌ Membership expired</span><br/>
-            <a href="#pick-plan" class="btn btn-primary btn-sm mt-2">Renew Plan →</a>
-        </div>
+    <!-- PLAN CAROUSEL -->
+    <div class="section-heading">
+        <h3 th:text="${activeSub != null} ? 'Switch or Upgrade' : 'Choose a Plan'">Choose a Plan</h3>
+        <p>Swipe left or right to explore all options</p>
     </div>
-
-    <!-- ── CHOOSE A PLAN ── -->
-    <div id="pick-plan">
-        <h5 class="fw-bold mb-1">Choose a Plan</h5>
-        <p class="text-muted small mb-3">Select a membership to get started</p>
-
-        <div class="row g-3">
+    <div class="carousel-outer">
+        <button class="c-arrow left" onclick="slide('dc',-1)">&#8592;</button>
+        <div class="carousel-track" id="dc">
 
             <!-- Starter -->
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="text-muted">Starter</h6>
-                        <h3 class="fw-bold">$29 <small class="fs-6 text-muted fw-normal">/ mo</small></h3>
-                        <ul class="list-unstyled flex-grow-1 mt-3">
-                            <li class="py-1 border-bottom">✓ Full gym access</li>
-                            <li class="py-1 border-bottom">✓ Locker room</li>
-                            <li class="py-1 border-bottom">✓ Basic equipment</li>
-                            <li class="py-1">✓ 1 guest pass/mo</li>
-                        </ul>
-                        <button class="btn btn-outline-primary w-100 mt-3"
-                                data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                data-plan="starter" data-name="Starter"
-                                data-duration="1 Month" data-price="$29">
-                            Choose Plan
-                        </button>
-                    </div>
-                </div>
+            <div class="plan-card">
+                <div class="plan-label">Starter</div><div class="plan-price"><sup>$</sup>29</div>
+                <div class="plan-period">per month</div><hr class="plan-divider"/>
+                <div class="plan-features-label">What's included</div>
+                <ul class="plan-features"><li>Full gym access</li><li>Locker room</li><li>Basic equipment</li><li>1 guest pass/month</li></ul>
+                <button class="btn btn-outline btn-full" onclick="openPayment('Starter','1 Month','$29','29.00')">Choose Plan</button>
             </div>
 
             <!-- Pro -->
-            <div class="col-md-4">
-                <div class="card h-100 border-primary">
-                    <div class="card-header bg-primary text-white text-center small fw-semibold">
-                        ⚡ Most Popular
-                    </div>
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="text-muted">Pro</h6>
-                        <h3 class="fw-bold">$75 <small class="fs-6 text-muted fw-normal">/ 3 mo</small></h3>
-                        <p class="text-success small">🔥 Save $12 vs monthly</p>
-                        <ul class="list-unstyled flex-grow-1 mt-2">
-                            <li class="py-1 border-bottom">✓ Everything in Starter</li>
-                            <li class="py-1 border-bottom">✓ Group fitness classes</li>
-                            <li class="py-1 border-bottom">✓ Towel service</li>
-                            <li class="py-1">✓ Nutrition guide</li>
-                        </ul>
-                        <button class="btn btn-primary w-100 mt-3"
-                                data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                data-plan="pro" data-name="Pro"
-                                data-duration="3 Months" data-price="$75">
-                            Choose Plan
-                        </button>
-                    </div>
-                </div>
+            <div class="plan-card popular">
+                <div class="popular-badge">⚡ Most Popular</div>
+                <div class="plan-label">Pro</div><div class="plan-price"><sup>$</sup>75</div>
+                <div class="plan-period">per 3 months</div><div class="plan-save">Save $12 vs monthly</div><hr class="plan-divider"/>
+                <div class="plan-features-label">What's included</div>
+                <ul class="plan-features"><li>Everything in Starter</li><li>Group fitness classes</li><li>Towel service</li><li>Nutrition guide</li></ul>
+                <button class="btn btn-primary btn-full" onclick="openPayment('Pro','3 Months','$75','75.00')">Choose Plan</button>
             </div>
 
             <!-- Elite -->
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="text-muted">Elite</h6>
-                        <h3 class="fw-bold">$249 <small class="fs-6 text-muted fw-normal">/ yr</small></h3>
-                        <p class="text-success small">🔥 Save $99 vs monthly</p>
-                        <ul class="list-unstyled flex-grow-1 mt-2">
-                            <li class="py-1 border-bottom">✓ Everything in Pro</li>
-                            <li class="py-1 border-bottom">✓ Personal trainer 4x/mo</li>
-                            <li class="py-1 border-bottom">✓ Priority booking</li>
-                            <li class="py-1">✓ Unlimited guests</li>
-                        </ul>
-                        <button class="btn btn-outline-primary w-100 mt-3"
-                                data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                data-plan="elite" data-name="Elite"
-                                data-duration="1 Year" data-price="$249">
-                            Choose Plan
-                        </button>
+            <div class="plan-card">
+                <div class="plan-label">Elite</div><div class="plan-price"><sup>$</sup>249</div>
+                <div class="plan-period">per year</div><div class="plan-save">Save $99 vs monthly</div><hr class="plan-divider"/>
+                <div class="plan-features-label">What's included</div>
+                <ul class="plan-features"><li>Everything in Pro</li><li>Personal trainer 4×/mo</li><li>Priority booking</li><li>Unlimited guests</li></ul>
+                <button class="btn btn-outline btn-full" onclick="openPayment('Elite','1 Year','$249','249.00')">Choose Plan</button>
+            </div>
+
+        </div>
+        <button class="c-arrow right" onclick="slide('dc',1)">&#8594;</button>
+    </div>
+    <div class="carousel-dots" id="dc-dots">
+        <button class="dot active" onclick="goto('dc',0)"></button>
+        <button class="dot" onclick="goto('dc',1)"></button>
+        <button class="dot" onclick="goto('dc',2)"></button>
+    </div>
+
+    <!-- SUBSCRIPTION HISTORY -->
+    <div th:if="${!subHistory.isEmpty()}" style="margin-top:40px;">
+        <div class="section-heading">
+            <h3>Subscription History</h3>
+        </div>
+        <table class="history-table">
+            <thead>
+            <tr><th>Plan</th><th>Period</th><th>Price</th><th>Start</th><th>End</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${subHistory}">
+                <td th:text="${s.planName}"></td>
+                <td th:text="${s.period}"></td>
+                <td th:text="'$' + ${#numbers.formatDecimal(s.price,1,2)}"></td>
+                <td th:text="${s.startDate}"></td>
+                <td th:text="${s.endDate}"></td>
+                <td><span th:class="'badge badge-' + ${s.status.toLowerCase()}" th:text="${s.status}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-bg" id="payModal" onclick="if(event.target===this)closePayment()">
+    <div class="modal">
+        <button class="modal-x" onclick="closePayment()">✕</button>
+        <div class="steps-bar">
+            <div class="step-item">
+                <div class="step-circle active" id="s1-circle">1</div>
+                <div class="step-label active" id="s1-label">Card Details</div>
+            </div>
+            <div class="step-line" id="step-line"></div>
+            <div class="step-item">
+                <div class="step-circle" id="s2-circle">2</div>
+                <div class="step-label" id="s2-label">Confirm</div>
+            </div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step-panel active" id="panel-1">
+            <div style="margin-top:18px">
+                <div class="plan-summary-box">
+                    <div class="psb-left">
+                        <div class="psb-name" id="p-name">Pro Plan</div>
+                        <div class="psb-period" id="p-period">3 months access</div>
+                    </div>
+                    <div class="psb-price" id="p-price">$75</div>
+                </div>
+                <div class="field"><label>Cardholder Name</label><input type="text" id="inp-name" placeholder="Name on card" oninput="updateCard()"/></div>
+                <div class="field">
+                    <label>Card Number</label>
+                    <div class="card-input-wrap">
+                        <input type="text" id="inp-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this);updateCard()"/>
+                        <span class="card-brand" id="card-brand">💳</span>
                     </div>
                 </div>
+                <div class="field-row">
+                    <div class="field"><label>Expiry Date</label><input type="text" id="inp-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this);updateCard()"/></div>
+                    <div class="field"><label>CVV</label><input type="text" id="inp-cvv" placeholder="•••" maxlength="4"/></div>
+                </div>
+                <div class="secure-note">🔒 Your payment is secured with 256-bit SSL encryption</div>
             </div>
-
+            <div class="modal-actions" style="margin-top:22px">
+                <button class="btn btn-outline" onclick="closePayment()">Cancel</button>
+                <button class="btn btn-primary" onclick="goStep2()">Continue →</button>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- ── CONFIRM MODAL ── -->
-<div class="modal fade" id="confirmModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title fw-bold">Confirm Membership</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body pt-0">
-                <p class="text-muted small mb-3">Review your plan before confirming</p>
-                <table class="table table-sm table-borderless bg-light rounded mb-3">
-                    <tr><td class="text-muted">Plan</td>      <td class="fw-semibold" id="m-name"></td></tr>
-                    <tr><td class="text-muted">Duration</td>  <td id="m-duration"></td></tr>
-                    <tr><td class="text-muted fw-bold">Total</td><td class="fw-bold text-primary" id="m-price"></td></tr>
-                </table>
-                <form th:action="@{/subscribe}" method="post">
-                    <input type="hidden" name="plan" id="m-plan-input"/>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary flex-fill fw-semibold">Confirm &amp; Pay</button>
+        <!-- STEP 2 -->
+        <div class="step-panel" id="panel-2">
+            <div style="margin-top:18px">
+                <div class="card-preview">
+                    <div class="card-preview-top"><div class="card-chip"></div><div class="card-network" id="prev-network">💳</div></div>
+                    <div class="card-number-display" id="prev-num">•••• •••• •••• ••••</div>
+                    <div class="card-bottom">
+                        <div><div class="card-bottom-label">Card Holder</div><div class="card-bottom-val" id="prev-name">YOUR NAME</div></div>
+                        <div><div class="card-bottom-label">Expires</div><div class="card-bottom-val" id="prev-exp">MM/YY</div></div>
                     </div>
-                </form>
+                </div>
+                <div class="order-summary">
+                    <div class="order-row"><span class="order-label">Plan</span><strong id="conf-plan">—</strong></div>
+                    <div class="order-row"><span class="order-label">Duration</span><strong id="conf-dur">—</strong></div>
+                    <div class="order-row"><span class="order-label">Tax (10%)</span><strong id="conf-tax">—</strong></div>
+                    <div class="order-row"><span class="order-label">Total</span><strong id="conf-total">—</strong></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="goStep1()">← Back</button>
+                <button class="btn btn-primary" onclick="confirmPay()">Pay Now 🔒</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/dashboard.js}"></script>
+<script>
+    /* ── Carousel ── */
+    function slide(id, dir) {
+        document.getElementById(id).scrollBy({ left: dir * 296, behavior: 'smooth' });
+        setTimeout(() => syncDots(id), 350);
+    }
+    function goto(id, i) {
+        document.getElementById(id).scrollTo({ left: i * 296, behavior: 'smooth' });
+        setTimeout(() => syncDots(id), 350);
+    }
+    function syncDots(id) {
+        const el = document.getElementById(id);
+        const i = Math.round(el.scrollLeft / 296);
+        document.querySelectorAll('#' + id + '-dots .dot').forEach((d,j) => d.classList.toggle('active', j === i));
+    }
+    document.querySelectorAll('.carousel-track').forEach(el => {
+        el.addEventListener('scroll', () => syncDots(el.id), { passive: true });
+    });
+
+    /* ── Payment Modal ── */
+    let currentPlan = {};
+    function openPayment(name, period, price, raw) {
+        currentPlan = { name, period, price, raw: parseFloat(raw) };
+        document.getElementById('p-name').textContent   = name + ' Plan';
+        document.getElementById('p-period').textContent = period + ' access';
+        document.getElementById('p-price').textContent  = price;
+        goStep1();
+        document.getElementById('payModal').classList.add('open');
+    }
+    function closePayment() { document.getElementById('payModal').classList.remove('open'); }
+    function goStep1() {
+        document.getElementById('panel-1').classList.add('active');
+        document.getElementById('panel-2').classList.remove('active');
+        document.getElementById('s1-circle').className = 'step-circle active';
+        document.getElementById('s1-label').className  = 'step-label active';
+        document.getElementById('s2-circle').className = 'step-circle';
+        document.getElementById('s2-label').className  = 'step-label';
+        document.getElementById('step-line').className  = 'step-line';
+    }
+    function goStep2() {
+        const num = document.getElementById('inp-num').value;
+        const exp = document.getElementById('inp-exp').value;
+        if (num.replace(/\s/g,'').length < 16) { alert('Please enter a valid 16-digit card number.'); return; }
+        if (exp.length < 5) { alert('Please enter a valid expiry date.'); return; }
+        const tax   = (currentPlan.raw * 0.1).toFixed(2);
+        const total = (currentPlan.raw * 1.1).toFixed(2);
+        document.getElementById('conf-plan').textContent  = currentPlan.name + ' Plan';
+        document.getElementById('conf-dur').textContent   = currentPlan.period;
+        document.getElementById('conf-tax').textContent   = '$' + tax;
+        document.getElementById('conf-total').textContent = '$' + total;
+        updateCard();
+        document.getElementById('panel-1').classList.remove('active');
+        document.getElementById('panel-2').classList.add('active');
+        document.getElementById('s1-circle').className   = 'step-circle done';
+        document.getElementById('s1-circle').textContent = '✓';
+        document.getElementById('s1-label').className    = 'step-label done';
+        document.getElementById('s2-circle').className   = 'step-circle active';
+        document.getElementById('s2-label').className    = 'step-label active';
+        document.getElementById('step-line').className   = 'step-line done';
+    }
+    function confirmPay() {
+        closePayment();
+        setTimeout(() => alert('✅ Payment successful! Your ' + currentPlan.name + ' membership is now active.'), 200);
+    }
+    function fmtCard(el) {
+        let v = el.value.replace(/\D/g,'').substring(0,16);
+        el.value = v.replace(/(.{4})/g,'$1 ').trim();
+    }
+    function fmtExp(el) {
+        let v = el.value.replace(/\D/g,'').substring(0,4);
+        if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+        el.value = v;
+    }
+    function updateCard() {
+        const num  = document.getElementById('inp-num').value  || '•••• •••• •••• ••••';
+        const name = document.getElementById('inp-name').value || 'YOUR NAME';
+        const exp  = document.getElementById('inp-exp').value  || 'MM/YY';
+        const first = num.replace(/\s/g,'')[0];
+        let brand = '💳';
+        if (first === '4') brand = '💙';
+        if (first === '5') brand = '🔴';
+        if (first === '3') brand = '🟡';
+        document.getElementById('card-brand').textContent   = brand;
+        document.getElementById('prev-network').textContent = brand;
+        document.getElementById('prev-num').textContent     = num.length > 4 ? num : '•••• •••• •••• ••••';
+        document.getElementById('prev-name').textContent    = name.toUpperCase();
+        document.getElementById('prev-exp').textContent     = exp;
+    }
+</script>
 </body>
 </html>

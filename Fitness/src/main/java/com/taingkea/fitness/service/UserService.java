@@ -2,34 +2,66 @@ package com.taingkea.fitness.service;
 
 import com.taingkea.fitness.model.User;
 import com.taingkea.fitness.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
-public class UserService {
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    // ── Spring Security ───────────────────────────────────
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRole())
+                .build();
     }
 
-    public void register(String name, String email, String password) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(encoder.encode(password));
-        userRepository.save(user);
+    // ── Registration ──────────────────────────────────────
+    public User register(String username, String email, String rawPassword) {
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("Username already taken.");
+        }
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already registered.");
+        }
+
+        User user = User.builder()
+                .username(username)
+                .email(email)
+                .password(passwordEncoder.encode(rawPassword))
+                .build();
+
+        return userRepository.save(user);
     }
 
-    public User login(String email, String password) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) return null;
-        if (!encoder.matches(password, user.getPassword())) return null;
-        return user;
+    // ── Helpers ───────────────────────────────────────────
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

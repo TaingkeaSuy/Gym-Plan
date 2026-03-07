@@ -3,93 +3,171 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>FitZone</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <title>Patrick Star Gym 🌟</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --blue: #2563eb; --blue-light: #eff6ff; --blue-dark: #1d4ed8;
+            --text: #111827; --text-2: #6b7280; --text-3: #9ca3af;
+            --border: #e5e7eb; --bg: #ffffff; --bg-2: #f9fafb;
+            --green: #16a34a; --green-light: #f0fdf4;
+            --red: #dc2626; --red-light: #fef2f2;
+            --shadow: 0 1px 3px rgba(0,0,0,.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+        .logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.02em; text-decoration: none; }
+        .logo span { color: var(--blue); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; transition: all .15s; text-decoration: none; }
+        .btn-primary { background: var(--blue); color: #fff; }
+        .btn-primary:hover { background: var(--blue-dark); }
+        .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+        .btn-outline:hover { border-color: #9ca3af; background: var(--bg-2); }
+        .btn-white { background: #fff; color: var(--blue); }
+        .btn-white:hover { background: #f0f9ff; }
+        .btn-outline-white { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.5); }
+        .btn-outline-white:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+        .btn-sm { padding: 7px 14px; font-size: 13px; }
+        .btn-lg { padding: 14px 28px; font-size: 15px; border-radius: 10px; }
+        .btn-full { width: 100%; }
+        .hero-section { position: relative; min-height: 560px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #0d1117; }
+        .hero-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .5; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.4) 60%, rgba(0,0,0,.7) 100%); }
+        .hero { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; padding: 96px 24px 72px; text-align: center; }
+        .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); backdrop-filter: blur(8px); color: #fff; border: 1px solid rgba(255,255,255,.25); font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: 100px; margin-bottom: 20px; }
+        .hero h1 { font-size: clamp(36px,6vw,58px); font-weight: 800; line-height: 1.08; letter-spacing: -.03em; margin-bottom: 16px; color: #fff; }
+        .hero h1 em { font-style: normal; color: #93c5fd; }
+        .hero p { font-size: 16px; color: rgba(255,255,255,.8); max-width: 440px; margin: 0 auto 32px; line-height: 1.7; }
+        .hero-cta { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .hero-note { font-size: 13px; color: rgba(255,255,255,.55); }
+        .stats-row { display: flex; justify-content: center; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-2); }
+        .stat-item { flex: 1; text-align: center; padding: 20px 16px; border-right: 1px solid var(--border); }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-size: 22px; font-weight: 800; }
+        .stat-label { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+        .plans-section { max-width: 940px; margin: 0 auto; padding: 56px 24px; }
+        .section-header { text-align: center; margin-bottom: 36px; }
+        .section-title { font-size: 26px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 6px; }
+        .section-sub { font-size: 14px; color: var(--text-2); }
+        .carousel-outer { position: relative; }
+        .carousel-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 4px 2px 16px; scrollbar-width: none; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .plan-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; flex-shrink: 0; width: 300px; scroll-snap-align: start; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; position: relative; }
+        .plan-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .plan-card.popular { border-color: var(--blue); }
+        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; white-space: nowrap; }
+        .plan-label { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; }
+        .plan-price { font-size: 46px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
+        .plan-price sup { font-size: 22px; vertical-align: top; margin-top: 8px; }
+        .plan-period { font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
+        .plan-save { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 20px; }
+        .plan-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 16px; }
+        .plan-features-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+        .plan-features { list-style: none; flex: 1; margin-bottom: 22px; }
+        .plan-features li { font-size: 14px; color: var(--text-2); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+        .plan-features li:last-child { border-bottom: none; }
+        .plan-features li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+        .carousel-dots { display: flex; justify-content: center; gap: 7px; margin-top: 4px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; padding: 0; transition: all .2s; }
+        .dot.active { background: var(--blue); width: 20px; border-radius: 4px; }
+        .c-arrow { position: absolute; top: 50%; transform: translateY(-60%); width: 34px; height: 34px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text); z-index: 10; box-shadow: var(--shadow); transition: all .15s; }
+        .c-arrow:hover { background: var(--bg-2); }
+        .c-arrow.left { left: -17px; }
+        .c-arrow.right { right: -17px; }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
-<!-- NAVBAR -->
-<nav class="navbar bg-white border-bottom px-4">
-    <a class="navbar-brand fw-bold" href="/">FitZone</a>
-    <div th:if="${session.user == null}">
-        <a href="/login" class="btn btn-primary btn-sm">Sign In</a>
+<!-- NAVBAR (inside hero overlay) -->
+<div class="hero-section">
+    <img class="hero-bg-img" src="https://i.pinimg.com/1200x/d2/5c/dd/d25cdddc2b6ac180f0d251ca360db9f7.jpg" alt="Gym"/>
+    <div class="hero-overlay"></div>
+    <nav style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:rgba(0,0,0,.3);border-bottom:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);z-index:10;">
+        <div class="logo" style="color:#fff;">Patrick <span style="color:#93c5fd;">Star Gym</span></div>
+        <div class="nav-right">
+            <a th:href="@{/login}"    class="btn btn-outline-white btn-sm">Sign In</a>
+            <a th:href="@{/register}" class="btn btn-white btn-sm">Join Now</a>
+        </div>
+    </nav>
+    <div class="hero">
+        <div class="hero-tag">🏋️ Open 24 / 7</div>
+        <h1>Your gym,<br/><em>your rules.</em></h1>
+        <p>No contracts, no confusion. Pick a plan that works for you and start today.</p>
+        <div class="hero-cta">
+            <a th:href="@{/register}" class="btn btn-white btn-lg">Join Now</a>
+            <span class="hero-note">Cancel anytime &nbsp;·&nbsp; No hidden fees</span>
+        </div>
     </div>
-    <div th:if="${session.user != null}" class="d-flex align-items-center gap-2">
-        <span class="text-muted small" th:text="'Hi, ' + ${session.user.name}"></span>
-        <a href="/dashboard" class="btn btn-outline-primary btn-sm">Dashboard</a>
-        <a href="/logout" class="btn btn-outline-secondary btn-sm">Sign Out</a>
-    </div>
-</nav>
+</div>
 
-<!-- HERO -->
-<div class="text-center py-5 mt-3">
-    <h1 class="fw-bold">Your gym, your membership.</h1>
-    <p class="text-muted mb-4">Pick a plan, start today. No hidden fees, no contracts.</p>
-    <a href="/login" class="btn btn-primary px-4 py-2">Get Started</a>
+<!-- STATS -->
+<div class="stats-row">
+    <div class="stat-item"><div class="stat-num">2,400+</div><div class="stat-label">Members</div></div>
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Access</div></div>
+    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Classes/Week</div></div>
+    <div class="stat-item"><div class="stat-num">4.9 ⭐</div><div class="stat-label">Rating</div></div>
 </div>
 
 <!-- PLANS -->
-<div class="container pb-5" style="max-width:900px">
-    <h4 class="text-center fw-bold mb-4">Simple Pricing</h4>
-    <div class="row g-3">
-
-        <!-- Starter -->
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column p-4">
-                    <h6 class="text-muted">Starter</h6>
-                    <h2 class="fw-bold">$29 <small class="fs-6 text-muted fw-normal">/ mo</small></h2>
-                    <ul class="list-unstyled flex-grow-1 mt-3">
-                        <li class="py-1 border-bottom">✓ Full gym access</li>
-                        <li class="py-1 border-bottom">✓ Locker room</li>
-                        <li class="py-1 border-bottom">✓ Basic equipment</li>
-                        <li class="py-1">✓ 1 guest pass/mo</li>
-                    </ul>
-                    <a href="/login" class="btn btn-outline-primary w-100 mt-3">Get Started</a>
-                </div>
+<div class="plans-section">
+    <div class="section-header">
+        <div class="section-title">Choose Your Plan</div>
+        <div class="section-sub">Swipe left and right to see all plans</div>
+    </div>
+    <div class="carousel-outer">
+        <button class="c-arrow left" onclick="slide('hc',-1)">&#8592;</button>
+        <div class="carousel-track" id="hc">
+            <div class="plan-card">
+                <div class="plan-label">Starter</div><div class="plan-price"><sup>$</sup>29</div>
+                <div class="plan-period">per month</div><hr class="plan-divider"/>
+                <div class="plan-features-label">What's included</div>
+                <ul class="plan-features"><li>Full gym access</li><li>Locker room</li><li>Basic equipment</li><li>1 guest pass/month</li></ul>
+                <a th:href="@{/register}" class="btn btn-outline btn-full">Choose Starter</a>
+            </div>
+            <div class="plan-card popular">
+                <div class="popular-badge">⚡ Most Popular</div>
+                <div class="plan-label">Pro</div><div class="plan-price"><sup>$</sup>75</div>
+                <div class="plan-period">per 3 months</div><div class="plan-save">Save $12 vs monthly</div><hr class="plan-divider"/>
+                <div class="plan-features-label">What's included</div>
+                <ul class="plan-features"><li>Everything in Starter</li><li>Group fitness classes</li><li>Towel service</li><li>Nutrition guide</li></ul>
+                <a th:href="@{/register}" class="btn btn-primary btn-full">Choose Pro</a>
+            </div>
+            <div class="plan-card">
+                <div class="plan-label">Elite</div><div class="plan-price"><sup>$</sup>249</div>
+                <div class="plan-period">per year</div><div class="plan-save">Save $99 vs monthly</div><hr class="plan-divider"/>
+                <div class="plan-features-label">What's included</div>
+                <ul class="plan-features"><li>Everything in Pro</li><li>Personal trainer 4×/mo</li><li>Priority booking</li><li>Unlimited guests</li></ul>
+                <a th:href="@{/register}" class="btn btn-outline btn-full">Choose Elite</a>
             </div>
         </div>
-
-        <!-- Pro -->
-        <div class="col-md-4">
-            <div class="card h-100 border-primary">
-                <div class="card-header bg-primary text-white text-center small fw-semibold">⚡ Most Popular</div>
-                <div class="card-body d-flex flex-column p-4">
-                    <h6 class="text-muted">Pro</h6>
-                    <h2 class="fw-bold">$75 <small class="fs-6 text-muted fw-normal">/ 3 mo</small></h2>
-                    <p class="text-success small">🔥 Save $12 vs monthly</p>
-                    <ul class="list-unstyled flex-grow-1 mt-2">
-                        <li class="py-1 border-bottom">✓ Everything in Starter</li>
-                        <li class="py-1 border-bottom">✓ Group fitness classes</li>
-                        <li class="py-1 border-bottom">✓ Towel service</li>
-                        <li class="py-1">✓ Nutrition guide</li>
-                    </ul>
-                    <a href="/login" class="btn btn-primary w-100 mt-3">Get Started</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Elite -->
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column p-4">
-                    <h6 class="text-muted">Elite</h6>
-                    <h2 class="fw-bold">$249 <small class="fs-6 text-muted fw-normal">/ yr</small></h2>
-                    <p class="text-success small">🔥 Save $99 vs monthly</p>
-                    <ul class="list-unstyled flex-grow-1 mt-2">
-                        <li class="py-1 border-bottom">✓ Everything in Pro</li>
-                        <li class="py-1 border-bottom">✓ Personal trainer 4x/mo</li>
-                        <li class="py-1 border-bottom">✓ Priority booking</li>
-                        <li class="py-1">✓ Unlimited guests</li>
-                    </ul>
-                    <a href="/login" class="btn btn-outline-primary w-100 mt-3">Get Started</a>
-                </div>
-            </div>
-        </div>
-
+        <button class="c-arrow right" onclick="slide('hc',1)">&#8594;</button>
+    </div>
+    <div class="carousel-dots" id="hc-dots">
+        <button class="dot active" onclick="goto('hc',0)"></button>
+        <button class="dot" onclick="goto('hc',1)"></button>
+        <button class="dot" onclick="goto('hc',2)"></button>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function slide(id, dir) {
+        document.getElementById(id).scrollBy({ left: dir * 316, behavior: 'smooth' });
+        setTimeout(() => syncDots(id), 350);
+    }
+    function goto(id, i) {
+        document.getElementById(id).scrollTo({ left: i * 316, behavior: 'smooth' });
+        setTimeout(() => syncDots(id), 350);
+    }
+    function syncDots(id) {
+        const el = document.getElementById(id);
+        const i = Math.round(el.scrollLeft / 316);
+        document.querySelectorAll('#' + id + '-dots .dot').forEach((d,j) => d.classList.toggle('active', j === i));
+    }
+    document.querySelectorAll('.carousel-track').forEach(el => {
+        el.addEventListener('scroll', () => syncDots(el.id), { passive: true });
+    });
+</script>
 </body>
 </html>

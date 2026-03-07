@@ -1,127 +1,92 @@
 package com.taingkea.fitness.controller;
 
+import com.taingkea.fitness.model.Subscription;
 import com.taingkea.fitness.model.User;
 import com.taingkea.fitness.service.SubscriptionService;
 import com.taingkea.fitness.service.UserService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
+
 @Controller
+@RequiredArgsConstructor
 public class PageController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final SubscriptionService subscriptionService;
 
-    @Autowired
-    private SubscriptionService subscriptionService;
-
-    /* ── LANDING ── */
+    // ── Home ─────────────────────────────────────────────
     @GetMapping("/")
-    public String index() {
+    public String home() {
         return "index";
     }
 
-    /* ── REGISTER ── */
+    // ── Login ────────────────────────────────────────────
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(required = false) String error,
+                            @RequestParam(required = false) String logout,
+                            Model model) {
+        if (error  != null) model.addAttribute("error",   "Invalid username or password.");
+        if (logout != null) model.addAttribute("message", "You have been logged out.");
+        return "login";
+    }
+
+    // ── Register ─────────────────────────────────────────
     @GetMapping("/register")
     public String registerPage() {
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String name,
+    public String register(@RequestParam String username,
                            @RequestParam String email,
                            @RequestParam String password,
-                           @RequestParam String confirmPassword,
-                           Model model,
-                           RedirectAttributes redirectAttributes) {
-
-        // Always pre-populate so fields survive any validation error
-        model.addAttribute("name", name);
-        model.addAttribute("email", email);
-
-        if (name.isBlank() || email.isBlank() || password.isBlank()) {
-            model.addAttribute("error", "Please fill in all fields.");
-            return "register";
-        }
-        if (password.length() < 6) {
-            model.addAttribute("error", "Password must be at least 6 characters.");
-            return "register";
-        }
-        if (!password.equals(confirmPassword)) {
-            model.addAttribute("error", "Passwords do not match.");
-            return "register";
-        }
-        if (userService.existsByEmail(email)) {
-            model.addAttribute("error", "Email already registered.");
-            return "register";
-        }
-
-        userService.register(name, email, password);
-        redirectAttributes.addFlashAttribute("success", "Account created! Please sign in.");
-        return "redirect:/login";
-    }
-
-    /* ── LOGIN ── */
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
-
-        User user = userService.login(email, password);
-
-        if (user == null) {
-            model.addAttribute("error", "Wrong email or password.");
-            return "login";
-        }
-
-        session.setAttribute("user", user);
-        return "redirect:/dashboard";
-    }
-
-    /* ── LOGOUT ── */
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    /* ── DASHBOARD ── */
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-
-        if (user == null) {
+                           RedirectAttributes ra) {
+        try {
+            userService.register(username, email, password);
+            ra.addFlashAttribute("message", "Account created! Please log in.");
             return "redirect:/login";
+        } catch (IllegalArgumentException ex) {
+            ra.addFlashAttribute("error", ex.getMessage());
+            return "redirect:/register";
         }
+    }
 
-        model.addAttribute("subscription", subscriptionService.getLatestSubscription(user.getId()));
+    // ── Dashboard ────────────────────────────────────────
+    @GetMapping("/dashboard")
+    public String dashboard(@AuthenticationPrincipal UserDetails principal, Model model) {
+        User user = userService.findByUsername(principal.getUsername()).orElseThrow();
+        Optional<Subscription> activeSub = subscriptionService.getActiveSubscription(user);
+
+        model.addAttribute("user",       user);
+        model.addAttribute("activeSub",  activeSub.orElse(null));
+        model.addAttribute("subHistory", subscriptionService.getAllForUser(user));
         return "dashboard";
     }
 
-    /* ── SUBSCRIBE ── */
+    // ── Subscribe ────────────────────────────────────────
     @PostMapping("/subscribe")
-    public String subscribe(@RequestParam String plan,
-                            HttpSession session,
-                            RedirectAttributes redirectAttributes) {
+    public String subscribe(@AuthenticationPrincipal UserDetails principal,
+                            @RequestParam String planName,
+                            @RequestParam String period,
+                            RedirectAttributes ra) {
+        User user = userService.findByUsername(principal.getUsername()).orElseThrow();
+        subscriptionService.subscribe(user, planName, period);
+        ra.addFlashAttribute("message", "🎉 You're now on the " + planName + " plan!");
+        return "redirect:/dashboard";
+    }
 
-        User user = (User) session.getAttribute("user");
-
-        if (user == null) {
-            return "redirect:/login";
-        }
-
-        subscriptionService.subscribe(user.getId(), plan);
-        redirectAttributes.addFlashAttribute("success", "Membership activated! 💪");
+    // ── Cancel ───────────────────────────────────────────
+    @PostMapping("/cancel/{id}")
+    public String cancel(@PathVariable Long id, RedirectAttributes ra) {
+        subscriptionService.cancel(id);
+        ra.addFlashAttribute("message", "Subscription cancelled.");
         return "redirect:/dashboard";
     }
 }

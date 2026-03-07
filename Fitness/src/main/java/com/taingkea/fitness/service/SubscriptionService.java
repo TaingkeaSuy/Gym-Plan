@@ -3,46 +3,79 @@ package com.taingkea.fitness.service;
 import com.taingkea.fitness.model.Subscription;
 import com.taingkea.fitness.model.User;
 import com.taingkea.fitness.repository.SubscriptionRepository;
-import com.taingkea.fitness.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SubscriptionService {
 
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public static final double PRICE_STARTER = 29.00;
+    public static final double PRICE_PRO     = 75.00;
+    public static final double PRICE_ELITE   = 249.00;
 
-    public Subscription getLatestSubscription(Long userId) {
-        return subscriptionRepository.findTopByUserIdOrderByStartDateDesc(userId);
-    }
+    /**
+     * Create a new subscription, cancelling any existing active ones first.
+     *
+     * @param user     the subscribing user
+     * @param planName "Starter" | "Pro" | "Elite"
+     * @param period   "1 Month" | "3 Months" | "1 Year"
+     */
+    public Subscription subscribe(User user, String planName, String period) {
+        // Cancel existing active subscriptions
+        List<Subscription> active = subscriptionRepository.findByUserAndStatus(user, "ACTIVE");
+        active.forEach(s -> {
+            s.setStatus("CANCELLED");
+            subscriptionRepository.save(s);
+        });
 
-    public void subscribe(Long userId, String plan) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null) return;
+        double price = switch (planName) {
+            case "Pro"   -> PRICE_PRO;
+            case "Elite" -> PRICE_ELITE;
+            default      -> PRICE_STARTER;
+        };
 
         LocalDate start = LocalDate.now();
-        LocalDate end;
+        LocalDate end = switch (period) {
+            case "3 Months" -> start.plusMonths(3);
+            case "1 Year"   -> start.plusYears(1);
+            default         -> start.plusMonths(1);
+        };
 
-        if (plan.equals("starter")) {
-            end = start.plusMonths(1);
-        } else if (plan.equals("pro")) {
-            end = start.plusMonths(3);
-        } else {
-            end = start.plusYears(1);
-        }
+        Subscription sub = Subscription.builder()
+                .user(user)
+                .planName(planName)
+                .period(period)
+                .price(price)
+                .startDate(start)
+                .endDate(end)
+                .build();
 
-        Subscription sub = new Subscription();
-        sub.setUser(user);
-        sub.setPlan(plan);
-        sub.setStartDate(start);
-        sub.setEndDate(end);
+        return subscriptionRepository.save(sub);
+    }
 
-        subscriptionRepository.save(sub);
+    public Optional<Subscription> getActiveSubscription(User user) {
+        return subscriptionRepository
+                .findByUserAndStatus(user, "ACTIVE")
+                .stream()
+                .filter(Subscription::isActive)
+                .findFirst();
+    }
+
+    public List<Subscription> getAllForUser(User user) {
+        return subscriptionRepository.findByUser(user);
+    }
+
+    public void cancel(Long subscriptionId) {
+        subscriptionRepository.findById(subscriptionId).ifPresent(s -> {
+            s.setStatus("CANCELLED");
+            subscriptionRepository.save(s);
+        });
     }
 }
