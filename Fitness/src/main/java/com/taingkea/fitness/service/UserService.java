@@ -2,7 +2,8 @@ package com.taingkea.fitness.service;
 
 import com.taingkea.fitness.model.User;
 import com.taingkea.fitness.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,22 +12,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // @Lazy breaks the circular dependency:
+    // SecurityConfig → UserService → PasswordEncoder (from PasswordConfig, via SecurityConfig context)
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository  = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     // ── Spring Security ───────────────────────────────────
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        String role = (user.getRole() != null) ? user.getRole() : "USER";
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole())
+                .roles(role)
                 .build();
     }
 
@@ -43,6 +53,7 @@ public class UserService implements UserDetailsService {
                 .username(username)
                 .email(email)
                 .password(passwordEncoder.encode(rawPassword))
+                .role("USER")
                 .build();
 
         return userRepository.save(user);

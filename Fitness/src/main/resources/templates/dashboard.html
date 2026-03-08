@@ -401,8 +401,11 @@
         document.getElementById('step-line').className   = 'step-line done';
     }
     function confirmPay() {
-        closePayment();
-        setTimeout(() => alert('✅ Payment successful! Your ' + currentPlan.name + ' membership is now active.'), 200);
+        // Actually submit to Spring backend /subscribe
+        const form = document.getElementById('subscribe-form');
+        document.getElementById('input-planName').value = currentPlan.name;
+        document.getElementById('input-period').value   = currentPlan.period;
+        form.submit();
     }
     function fmtCard(el) {
         let v = el.value.replace(/\D/g,'').substring(0,16);
@@ -429,5 +432,13 @@
         document.getElementById('prev-exp').textContent     = exp;
     }
 </script>
+
+<!-- Hidden form that actually submits the subscription to Spring -->
+<form id="subscribe-form" method="post" th:action="@{/subscribe}" style="display:none">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" id="input-planName" name="planName" value=""/>
+    <input type="hidden" id="input-period"   name="period"   value=""/>
+</form>
+
 </body>
 </html>
