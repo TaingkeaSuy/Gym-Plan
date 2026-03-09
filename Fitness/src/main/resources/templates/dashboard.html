@@ -34,15 +34,13 @@
         .btn-sm { padding: 7px 14px; font-size: 13px; }
         .btn-full { width: 100%; }
 
-        /* Dashboard layout */
-        .dash { max-width: 840px; margin: 0 auto; padding: 36px 24px 64px; }
+        .dash { max-width: 980px; margin: 0 auto; padding: 36px 24px 64px; }
         .dash-greeting { font-size: 24px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 24px; }
         .dash-greeting span { color: var(--blue); }
         .flash { display: flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; margin-bottom: 24px; }
         .flash-success { background: var(--green-light); color: var(--green); border: 1px solid #86efac; }
         .flash-error   { background: var(--red-light);   color: var(--red);   border: 1px solid #fca5a5; }
 
-        /* Status cards */
         .status-card { border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: var(--shadow); border: 1.5px solid var(--border); }
         .status-card.state-none { border-style: dashed; text-align: center; padding: 48px 28px; background: var(--bg-2); }
         .status-card.state-active { border-color: #86efac; background: var(--green-light); }
@@ -55,11 +53,6 @@
         .sc-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 22px; }
         .sc-info-item label { font-size: 12px; color: var(--text-2); font-weight: 500; display: block; margin-bottom: 4px; }
         .sc-info-item span { font-size: 15px; font-weight: 700; }
-        .sc-big { font-size: 34px; font-weight: 800; color: var(--blue); line-height: 1; }
-        .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-2); margin-bottom: 7px; font-weight: 500; }
-        .progress-bg { background: #e5e7eb; border-radius: 100px; height: 8px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--blue), #60a5fa); }
-        .progress-fill.red { background: linear-gradient(90deg, var(--red), #f87171); }
         .empty-icon { font-size: 44px; margin-bottom: 12px; }
         .empty-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
         .empty-sub { font-size: 14px; color: var(--text-2); margin-bottom: 20px; }
@@ -67,14 +60,12 @@
         .section-heading h3 { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
         .section-heading p { font-size: 13px; color: var(--text-2); }
 
-        /* Carousel */
-        .carousel-outer { position: relative; }
-        .carousel-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 4px 2px 16px; scrollbar-width: none; }
-        .carousel-track::-webkit-scrollbar { display: none; }
-        .plan-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; flex-shrink: 0; width: 280px; scroll-snap-align: start; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; position: relative; }
+        /* Plans grid */
+        .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        @media (max-width: 768px) { .plans-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1024px) and (min-width: 769px) { .plans-grid { grid-template-columns: repeat(2, 1fr); } }
+        .plan-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; position: relative; }
         .plan-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-        .plan-card.popular { border-color: var(--blue); }
-        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; white-space: nowrap; }
         .plan-label { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; }
         .plan-price { font-size: 46px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
         .plan-price sup { font-size: 22px; vertical-align: top; margin-top: 8px; }
@@ -86,13 +77,6 @@
         .plan-features li { font-size: 14px; color: var(--text-2); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
         .plan-features li:last-child { border-bottom: none; }
         .plan-features li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
-        .carousel-dots { display: flex; justify-content: center; gap: 7px; margin-top: 4px; }
-        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; padding: 0; transition: all .2s; }
-        .dot.active { background: var(--blue); width: 20px; border-radius: 4px; }
-        .c-arrow { position: absolute; top: 50%; transform: translateY(-60%); width: 34px; height: 34px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text); z-index: 10; box-shadow: var(--shadow); transition: all .15s; }
-        .c-arrow:hover { background: var(--bg-2); }
-        .c-arrow.left { left: -17px; }
-        .c-arrow.right { right: -17px; }
 
         /* History table */
         .history-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
@@ -199,50 +183,63 @@
         <div class="empty-sub">Pick a plan below to get started</div>
     </div>
 
-    <!-- PLAN CAROUSEL -->
+    <!-- PLAN GRID -->
     <div class="section-heading">
         <h3 th:text="${activeSub != null} ? 'Switch or Upgrade' : 'Choose a Plan'">Choose a Plan</h3>
-        <p>Swipe left or right to explore all options</p>
+        <p>No contracts. Cancel anytime.</p>
     </div>
-    <div class="carousel-outer">
-        <button class="c-arrow left" onclick="slide('dc',-1)">&#8592;</button>
-        <div class="carousel-track" id="dc">
+    <div class="plans-grid">
 
-            <!-- Starter -->
-            <div class="plan-card">
-                <div class="plan-label">Starter</div><div class="plan-price"><sup>$</sup>29</div>
-                <div class="plan-period">per month</div><hr class="plan-divider"/>
-                <div class="plan-features-label">What's included</div>
-                <ul class="plan-features"><li>Full gym access</li><li>Locker room</li><li>Basic equipment</li><li>1 guest pass/month</li></ul>
-                <button class="btn btn-outline btn-full" onclick="openPayment('Starter','1 Month','$29','29.00')">Choose Plan</button>
-            </div>
-
-            <!-- Pro -->
-            <div class="plan-card popular">
-                <div class="popular-badge">⚡ Most Popular</div>
-                <div class="plan-label">Pro</div><div class="plan-price"><sup>$</sup>75</div>
-                <div class="plan-period">per 3 months</div><div class="plan-save">Save $12 vs monthly</div><hr class="plan-divider"/>
-                <div class="plan-features-label">What's included</div>
-                <ul class="plan-features"><li>Everything in Starter</li><li>Group fitness classes</li><li>Towel service</li><li>Nutrition guide</li></ul>
-                <button class="btn btn-primary btn-full" onclick="openPayment('Pro','3 Months','$75','75.00')">Choose Plan</button>
-            </div>
-
-            <!-- Elite -->
-            <div class="plan-card">
-                <div class="plan-label">Elite</div><div class="plan-price"><sup>$</sup>249</div>
-                <div class="plan-period">per year</div><div class="plan-save">Save $99 vs monthly</div><hr class="plan-divider"/>
-                <div class="plan-features-label">What's included</div>
-                <ul class="plan-features"><li>Everything in Pro</li><li>Personal trainer 4×/mo</li><li>Priority booking</li><li>Unlimited guests</li></ul>
-                <button class="btn btn-outline btn-full" onclick="openPayment('Elite','1 Year','$249','249.00')">Choose Plan</button>
-            </div>
-
+        <!-- Starter -->
+        <div class="plan-card">
+            <div class="plan-label">Starter</div>
+            <div class="plan-price"><sup>$</sup>29</div>
+            <div class="plan-period">per month</div>
+            <hr class="plan-divider"/>
+            <div class="plan-features-label">What's included</div>
+            <ul class="plan-features">
+                <li>Full gym access</li>
+                <li>Locker room</li>
+                <li>Basic equipment</li>
+                <li>1 guest pass/month</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openPayment('Starter','1 Month','$29','29.00')">Choose Plan</button>
         </div>
-        <button class="c-arrow right" onclick="slide('dc',1)">&#8594;</button>
-    </div>
-    <div class="carousel-dots" id="dc-dots">
-        <button class="dot active" onclick="goto('dc',0)"></button>
-        <button class="dot" onclick="goto('dc',1)"></button>
-        <button class="dot" onclick="goto('dc',2)"></button>
+
+        <!-- Pro -->
+        <div class="plan-card">
+            <div class="plan-label">Pro</div>
+            <div class="plan-price"><sup>$</sup>75</div>
+            <div class="plan-period">per 3 months</div>
+            <div class="plan-save">Save $12 vs monthly</div>
+            <hr class="plan-divider"/>
+            <div class="plan-features-label">What's included</div>
+            <ul class="plan-features">
+                <li>Everything in Starter</li>
+                <li>Group fitness classes</li>
+                <li>Towel service</li>
+                <li>Nutrition guide</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openPayment('Pro','3 Months','$75','75.00')">Choose Plan</button>
+        </div>
+
+        <!-- Elite -->
+        <div class="plan-card">
+            <div class="plan-label">Elite</div>
+            <div class="plan-price"><sup>$</sup>249</div>
+            <div class="plan-period">per year</div>
+            <div class="plan-save">Save $99 vs monthly</div>
+            <hr class="plan-divider"/>
+            <div class="plan-features-label">What's included</div>
+            <ul class="plan-features">
+                <li>Everything in Pro</li>
+                <li>Personal trainer 4×/mo</li>
+                <li>Priority booking</li>
+                <li>Unlimited guests</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="openPayment('Elite','1 Year','$249','249.00')">Choose Plan</button>
+        </div>
+
     </div>
 
     <!-- SUBSCRIPTION HISTORY -->
@@ -341,24 +338,6 @@
 </div>
 
 <script>
-    /* ── Carousel ── */
-    function slide(id, dir) {
-        document.getElementById(id).scrollBy({ left: dir * 296, behavior: 'smooth' });
-        setTimeout(() => syncDots(id), 350);
-    }
-    function goto(id, i) {
-        document.getElementById(id).scrollTo({ left: i * 296, behavior: 'smooth' });
-        setTimeout(() => syncDots(id), 350);
-    }
-    function syncDots(id) {
-        const el = document.getElementById(id);
-        const i = Math.round(el.scrollLeft / 296);
-        document.querySelectorAll('#' + id + '-dots .dot').forEach((d,j) => d.classList.toggle('active', j === i));
-    }
-    document.querySelectorAll('.carousel-track').forEach(el => {
-        el.addEventListener('scroll', () => syncDots(el.id), { passive: true });
-    });
-
     /* ── Payment Modal ── */
     let currentPlan = {};
     function openPayment(name, period, price, raw) {
@@ -401,7 +380,6 @@
         document.getElementById('step-line').className   = 'step-line done';
     }
     function confirmPay() {
-        // Actually submit to Spring backend /subscribe
         const form = document.getElementById('subscribe-form');
         document.getElementById('input-planName').value = currentPlan.name;
         document.getElementById('input-period').value   = currentPlan.period;
