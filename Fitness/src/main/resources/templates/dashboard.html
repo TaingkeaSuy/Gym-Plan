@@ -60,11 +60,10 @@
         .section-heading h3 { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
         .section-heading p { font-size: 13px; color: var(--text-2); }
 
-        /* Plans grid */
         .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         @media (max-width: 768px) { .plans-grid { grid-template-columns: 1fr; } }
         @media (max-width: 1024px) and (min-width: 769px) { .plans-grid { grid-template-columns: repeat(2, 1fr); } }
-        .plan-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; position: relative; }
+        .plan-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; }
         .plan-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
         .plan-label { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; }
         .plan-price { font-size: 46px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
@@ -78,7 +77,6 @@
         .plan-features li:last-child { border-bottom: none; }
         .plan-features li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
 
-        /* History table */
         .history-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
         .history-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); border-bottom: 1px solid var(--border); }
         .history-table td { padding: 12px; border-bottom: 1px solid var(--border); }
@@ -86,57 +84,38 @@
         .badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 700; }
         .badge-cancelled { background: var(--bg-2); color: var(--text-2); }
 
-        /* Payment Modal */
-        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); }
+        /* ── Simplified Payment Modal ── */
+        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 500; align-items: center; justify-content: center; padding: 24px; }
         .modal-bg.open { display: flex; }
-        .modal { background: var(--bg); border-radius: 20px; width: 100%; max-width: 460px; box-shadow: 0 20px 60px rgba(0,0,0,.18); position: relative; overflow: hidden; animation: fadeIn .22s ease; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-        .modal-x { position: absolute; top: 16px; right: 16px; background: var(--bg-2); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-2); z-index: 10; }
-        .steps-bar { display: flex; align-items: center; padding: 20px 28px 0; }
-        .step-item { display: flex; align-items: center; gap: 8px; flex: 1; }
-        .step-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; border: 2px solid var(--border); background: var(--bg); color: var(--text-3); transition: all .3s; }
-        .step-circle.done { background: var(--blue); border-color: var(--blue); color: #fff; }
-        .step-circle.active { border-color: var(--blue); color: var(--blue); }
-        .step-label { font-size: 12px; font-weight: 600; color: var(--text-3); transition: color .3s; }
-        .step-label.active { color: var(--blue); }
-        .step-label.done { color: var(--green); }
-        .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; border-radius: 2px; transition: background .3s; }
-        .step-line.done { background: var(--blue); }
-        .step-panel { display: none; padding: 24px 28px 28px; }
-        .step-panel.active { display: block; }
-        .plan-summary-box { background: var(--blue-light); border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 16px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; }
-        .psb-left .psb-name { font-size: 16px; font-weight: 800; color: var(--text); }
-        .psb-left .psb-period { font-size: 13px; color: var(--text-2); margin-top: 2px; }
-        .psb-price { font-size: 28px; font-weight: 800; color: var(--blue); }
-        .field { margin-bottom: 16px; }
-        .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 7px; }
-        .field input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); outline: none; transition: border-color .15s; }
+        .modal { background: var(--bg); border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 16px 48px rgba(0,0,0,.16); overflow: hidden; animation: pop .2s ease; }
+        @keyframes pop { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:scale(1); } }
+
+        .modal-header { padding: 22px 24px 0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 17px; font-weight: 800; }
+        .modal-x { background: none; border: none; font-size: 18px; color: var(--text-3); cursor: pointer; line-height: 1; padding: 4px; }
+        .modal-x:hover { color: var(--text); }
+
+        .modal-plan-row { margin: 16px 24px; background: var(--blue-light); border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-plan-name { font-size: 15px; font-weight: 700; }
+        .modal-plan-sub  { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+        .modal-plan-price { font-size: 22px; font-weight: 800; color: var(--blue); }
+
+        .modal-body { padding: 4px 24px 24px; }
+        .field { margin-bottom: 14px; }
+        .field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+        .field input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; transition: border-color .15s; background: var(--bg); }
         .field input:focus { border-color: var(--blue); }
         .field input::placeholder { color: var(--text-3); }
         .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card-input-wrap { position: relative; }
-        .card-input-wrap input { padding-right: 56px; letter-spacing: .06em; }
-        .card-brand { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 20px; pointer-events: none; }
-        .secure-note { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-3); margin-top: 16px; justify-content: center; }
-        .order-summary { background: var(--bg-2); border-radius: 12px; padding: 18px; margin-bottom: 22px; }
-        .order-row { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-        .order-row:last-child { border-bottom: none; font-weight: 800; font-size: 16px; color: var(--blue); padding-bottom: 0; }
-        .order-label { color: var(--text-2); }
-        .card-preview { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; color: #fff; }
-        .card-preview-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-chip { width: 32px; height: 24px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 4px; }
-        .card-network { font-size: 22px; }
-        .card-number-display { font-size: 16px; letter-spacing: .2em; font-weight: 600; margin-bottom: 14px; font-family: monospace; }
-        .card-bottom { display: flex; justify-content: space-between; }
-        .card-bottom-label { font-size: 10px; opacity: .7; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
-        .card-bottom-val { font-size: 13px; font-weight: 600; }
-        .modal-actions { display: flex; gap: 10px; }
-        .modal-actions .btn { flex: 1; padding: 13px; }
+
+        .modal-footer { display: flex; gap: 10px; padding: 0 24px 24px; }
+        .modal-footer .btn { flex: 1; padding: 12px; }
+
+
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <a th:href="@{/}" class="logo">Patrick <span>Star Gym</span></a>
     <div class="nav-right">
@@ -148,15 +127,12 @@
     </div>
 </nav>
 
-<!-- MAIN DASHBOARD -->
 <div class="dash">
     <div class="dash-greeting">Hey, <span th:text="${user.username}">User</span> 👋</div>
 
-    <!-- Flash messages -->
     <div th:if="${message}" class="flash flash-success" th:text="${message}"></div>
     <div th:if="${error}"   class="flash flash-error"   th:text="${error}"></div>
 
-    <!-- ACTIVE subscription card -->
     <div th:if="${activeSub != null}" class="status-card state-active">
         <div class="sc-header">
             <div class="sc-plan-name" th:text="${activeSub.planName} + ' Plan'">Pro Plan</div>
@@ -167,30 +143,23 @@
             <div class="sc-info-item"><label>End Date</label><span th:text="${activeSub.endDate}"></span></div>
             <div class="sc-info-item"><label>Billing</label><span th:text="${activeSub.period}"></span></div>
         </div>
-        <div style="margin-top:16px;">
-            <form method="post" th:action="@{'/cancel/' + ${activeSub.id}}"
-                  onsubmit="return confirm('Cancel your subscription?')">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit" class="btn btn-danger btn-sm">Cancel Membership</button>
-            </form>
-        </div>
+        <form method="post" th:action="@{'/cancel/' + ${activeSub.id}}" onsubmit="return confirm('Cancel your subscription?')">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-danger btn-sm">Cancel Membership</button>
+        </form>
     </div>
 
-    <!-- NO subscription card -->
     <div th:if="${activeSub == null}" class="status-card state-none">
         <div class="empty-icon">🏋️</div>
         <div class="empty-title">No Active Membership</div>
         <div class="empty-sub">Pick a plan below to get started</div>
     </div>
 
-    <!-- PLAN GRID -->
     <div class="section-heading">
         <h3 th:text="${activeSub != null} ? 'Switch or Upgrade' : 'Choose a Plan'">Choose a Plan</h3>
         <p>No contracts. Cancel anytime.</p>
     </div>
     <div class="plans-grid">
-
-        <!-- Starter -->
         <div class="plan-card">
             <div class="plan-label">Starter</div>
             <div class="plan-price"><sup>$</sup>29</div>
@@ -205,8 +174,6 @@
             </ul>
             <button class="btn btn-outline btn-full" onclick="openPayment('Starter','1 Month','$29','29.00')">Choose Plan</button>
         </div>
-
-        <!-- Pro -->
         <div class="plan-card">
             <div class="plan-label">Pro</div>
             <div class="plan-price"><sup>$</sup>75</div>
@@ -222,8 +189,6 @@
             </ul>
             <button class="btn btn-outline btn-full" onclick="openPayment('Pro','3 Months','$75','75.00')">Choose Plan</button>
         </div>
-
-        <!-- Elite -->
         <div class="plan-card">
             <div class="plan-label">Elite</div>
             <div class="plan-price"><sup>$</sup>249</div>
@@ -239,14 +204,10 @@
             </ul>
             <button class="btn btn-outline btn-full" onclick="openPayment('Elite','1 Year','$249','249.00')">Choose Plan</button>
         </div>
-
     </div>
 
-    <!-- SUBSCRIPTION HISTORY -->
     <div th:if="${!subHistory.isEmpty()}" style="margin-top:40px;">
-        <div class="section-heading">
-            <h3>Subscription History</h3>
-        </div>
+        <div class="section-heading"><h3>Subscription History</h3></div>
         <table class="history-table">
             <thead>
             <tr><th>Plan</th><th>Period</th><th>Price</th><th>Start</th><th>End</th><th>Status</th></tr>
@@ -265,125 +226,70 @@
     </div>
 </div>
 
-<!-- PAYMENT MODAL -->
+<!-- SIMPLIFIED PAYMENT MODAL -->
 <div class="modal-bg" id="payModal" onclick="if(event.target===this)closePayment()">
     <div class="modal">
-        <button class="modal-x" onclick="closePayment()">✕</button>
-        <div class="steps-bar">
-            <div class="step-item">
-                <div class="step-circle active" id="s1-circle">1</div>
-                <div class="step-label active" id="s1-label">Card Details</div>
-            </div>
-            <div class="step-line" id="step-line"></div>
-            <div class="step-item">
-                <div class="step-circle" id="s2-circle">2</div>
-                <div class="step-label" id="s2-label">Confirm</div>
-            </div>
+        <div class="modal-header">
+            <div class="modal-title">Complete Payment</div>
+            <button class="modal-x" onclick="closePayment()">✕</button>
         </div>
 
-        <!-- STEP 1 -->
-        <div class="step-panel active" id="panel-1">
-            <div style="margin-top:18px">
-                <div class="plan-summary-box">
-                    <div class="psb-left">
-                        <div class="psb-name" id="p-name">Pro Plan</div>
-                        <div class="psb-period" id="p-period">3 months access</div>
-                    </div>
-                    <div class="psb-price" id="p-price">$75</div>
-                </div>
-                <div class="field"><label>Cardholder Name</label><input type="text" id="inp-name" placeholder="Name on card" oninput="updateCard()"/></div>
+        <div class="modal-plan-row">
+            <div>
+                <div class="modal-plan-name" id="p-name">Pro Plan</div>
+                <div class="modal-plan-sub"  id="p-period">3 months access</div>
+            </div>
+            <div class="modal-plan-price" id="p-price">$75</div>
+        </div>
+
+        <div class="modal-body">
+            <div class="field">
+                <label>Card Number</label>
+                <input type="text" id="inp-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"/>
+            </div>
+            <div class="field-row">
                 <div class="field">
-                    <label>Card Number</label>
-                    <div class="card-input-wrap">
-                        <input type="text" id="inp-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this);updateCard()"/>
-                        <span class="card-brand" id="card-brand">💳</span>
-                    </div>
+                    <label>Expiry</label>
+                    <input type="text" id="inp-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this)"/>
                 </div>
-                <div class="field-row">
-                    <div class="field"><label>Expiry Date</label><input type="text" id="inp-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this);updateCard()"/></div>
-                    <div class="field"><label>CVV</label><input type="text" id="inp-cvv" placeholder="•••" maxlength="4"/></div>
+                <div class="field">
+                    <label>CVV</label>
+                    <input type="text" id="inp-cvv" placeholder="•••" maxlength="4"/>
                 </div>
-                <div class="secure-note">🔒 Your payment is secured with 256-bit SSL encryption</div>
             </div>
-            <div class="modal-actions" style="margin-top:22px">
-                <button class="btn btn-outline" onclick="closePayment()">Cancel</button>
-                <button class="btn btn-primary" onclick="goStep2()">Continue →</button>
-            </div>
+
         </div>
 
-        <!-- STEP 2 -->
-        <div class="step-panel" id="panel-2">
-            <div style="margin-top:18px">
-                <div class="card-preview">
-                    <div class="card-preview-top"><div class="card-chip"></div><div class="card-network" id="prev-network">💳</div></div>
-                    <div class="card-number-display" id="prev-num">•••• •••• •••• ••••</div>
-                    <div class="card-bottom">
-                        <div><div class="card-bottom-label">Card Holder</div><div class="card-bottom-val" id="prev-name">YOUR NAME</div></div>
-                        <div><div class="card-bottom-label">Expires</div><div class="card-bottom-val" id="prev-exp">MM/YY</div></div>
-                    </div>
-                </div>
-                <div class="order-summary">
-                    <div class="order-row"><span class="order-label">Plan</span><strong id="conf-plan">—</strong></div>
-                    <div class="order-row"><span class="order-label">Duration</span><strong id="conf-dur">—</strong></div>
-                    <div class="order-row"><span class="order-label">Tax (10%)</span><strong id="conf-tax">—</strong></div>
-                    <div class="order-row"><span class="order-label">Total</span><strong id="conf-total">—</strong></div>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-outline" onclick="goStep1()">← Back</button>
-                <button class="btn btn-primary" onclick="confirmPay()">Pay Now 🔒</button>
-            </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closePayment()">Cancel</button>
+            <button class="btn btn-primary" onclick="confirmPay()">Pay Now</button>
         </div>
     </div>
 </div>
 
 <script>
-    /* ── Payment Modal ── */
     let currentPlan = {};
     function openPayment(name, period, price, raw) {
         currentPlan = { name, period, price, raw: parseFloat(raw) };
         document.getElementById('p-name').textContent   = name + ' Plan';
         document.getElementById('p-period').textContent = period + ' access';
         document.getElementById('p-price').textContent  = price;
-        goStep1();
+        document.getElementById('inp-num').value = '';
+        document.getElementById('inp-exp').value = '';
+        document.getElementById('inp-cvv').value = '';
         document.getElementById('payModal').classList.add('open');
     }
     function closePayment() { document.getElementById('payModal').classList.remove('open'); }
-    function goStep1() {
-        document.getElementById('panel-1').classList.add('active');
-        document.getElementById('panel-2').classList.remove('active');
-        document.getElementById('s1-circle').className = 'step-circle active';
-        document.getElementById('s1-label').className  = 'step-label active';
-        document.getElementById('s2-circle').className = 'step-circle';
-        document.getElementById('s2-label').className  = 'step-label';
-        document.getElementById('step-line').className  = 'step-line';
-    }
-    function goStep2() {
+    function confirmPay() {
         const num = document.getElementById('inp-num').value;
         const exp = document.getElementById('inp-exp').value;
-        if (num.replace(/\s/g,'').length < 16) { alert('Please enter a valid 16-digit card number.'); return; }
+        const cvv = document.getElementById('inp-cvv').value;
+        if (num.replace(/\s/g,'').length < 16) { alert('Please enter a valid card number.'); return; }
         if (exp.length < 5) { alert('Please enter a valid expiry date.'); return; }
-        const tax   = (currentPlan.raw * 0.1).toFixed(2);
-        const total = (currentPlan.raw * 1.1).toFixed(2);
-        document.getElementById('conf-plan').textContent  = currentPlan.name + ' Plan';
-        document.getElementById('conf-dur').textContent   = currentPlan.period;
-        document.getElementById('conf-tax').textContent   = '$' + tax;
-        document.getElementById('conf-total').textContent = '$' + total;
-        updateCard();
-        document.getElementById('panel-1').classList.remove('active');
-        document.getElementById('panel-2').classList.add('active');
-        document.getElementById('s1-circle').className   = 'step-circle done';
-        document.getElementById('s1-circle').textContent = '✓';
-        document.getElementById('s1-label').className    = 'step-label done';
-        document.getElementById('s2-circle').className   = 'step-circle active';
-        document.getElementById('s2-label').className    = 'step-label active';
-        document.getElementById('step-line').className   = 'step-line done';
-    }
-    function confirmPay() {
-        const form = document.getElementById('subscribe-form');
+        if (cvv.length < 3) { alert('Please enter your CVV.'); return; }
         document.getElementById('input-planName').value = currentPlan.name;
         document.getElementById('input-period').value   = currentPlan.period;
-        form.submit();
+        document.getElementById('subscribe-form').submit();
     }
     function fmtCard(el) {
         let v = el.value.replace(/\D/g,'').substring(0,16);
@@ -394,24 +300,8 @@
         if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
         el.value = v;
     }
-    function updateCard() {
-        const num  = document.getElementById('inp-num').value  || '•••• •••• •••• ••••';
-        const name = document.getElementById('inp-name').value || 'YOUR NAME';
-        const exp  = document.getElementById('inp-exp').value  || 'MM/YY';
-        const first = num.replace(/\s/g,'')[0];
-        let brand = '💳';
-        if (first === '4') brand = '💙';
-        if (first === '5') brand = '🔴';
-        if (first === '3') brand = '🟡';
-        document.getElementById('card-brand').textContent   = brand;
-        document.getElementById('prev-network').textContent = brand;
-        document.getElementById('prev-num').textContent     = num.length > 4 ? num : '•••• •••• •••• ••••';
-        document.getElementById('prev-name').textContent    = name.toUpperCase();
-        document.getElementById('prev-exp').textContent     = exp;
-    }
 </script>
 
-<!-- Hidden form that actually submits the subscription to Spring -->
 <form id="subscribe-form" method="post" th:action="@{/subscribe}" style="display:none">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <input type="hidden" id="input-planName" name="planName" value=""/>
