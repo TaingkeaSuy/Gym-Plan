@@ -129,6 +129,7 @@
 
 <div class="dash">
     <div class="dash-greeting">Hey, <span th:text="${user.username}">User</span> 👋</div>
+    <p>Today: <span th:text="${#templals.for(T(java.time.LocalDate.now(), 'dd MM yyyy')}"</span></p>
 
     <div th:if="${message}" class="flash flash-success" th:text="${message}"></div>
     <div th:if="${error}"   class="flash flash-error"   th:text="${error}"></div>
