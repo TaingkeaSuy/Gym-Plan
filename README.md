@@ -27,37 +27,41 @@ Lombok,Thymeleaf,Spring Security,JDBC API,Spring Data JPA,PostgreSQL,CycloneDX S
 
 <a href="https://gym-plan-production.up.railway.app/">Website</a>
 
-<h2>Data Structure figure</h2>
+<h2>Data Structure</h2>
 
 <p>
 
-@Table(name = "users")<br>
-public class User {<br>
+@Table(name = "users")
+public class User {
 
-&nbsp;&nbsp;@Id<br>
-&nbsp;&nbsp;@GeneratedValue(strategy = GenerationType.IDENTITY)<br>
-&nbsp;&nbsp;private Long id;<br><br>
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-&nbsp;&nbsp;private String username;<br>
-&nbsp;&nbsp;private String email;<br>
-&nbsp;&nbsp;private String password;<br>
-&nbsp;&nbsp;private String role;<br>
+    private String username;
+    private String email;
+    private String password;
+    private String role;
 
-}<br><br>
+}
 
-@Table(name = "subscriptions")<br>
-public class Subscription {<br>
+@Table(name = "subscriptions")
+public class Subscription {
 
-&nbsp;&nbsp;@Id<br>
-&nbsp;&nbsp;@GeneratedValue(strategy = GenerationType.IDENTITY)<br>
-&nbsp;&nbsp;private Long id;<br><br>
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-&nbsp;&nbsp;private String planName;<br>
-&nbsp;&nbsp;private String period;<br>
-&nbsp;&nbsp;private Double price;<br>
-&nbsp;&nbsp;private LocalDate startDate;<br>
-&nbsp;&nbsp;private LocalDate endDate;<br>
-&nbsp;&nbsp;private String status;<br>
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String planName;
+    private String period;
+    private Double price;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String status;
 
 }
 
