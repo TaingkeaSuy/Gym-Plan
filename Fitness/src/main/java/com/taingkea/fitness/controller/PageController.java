@@ -22,13 +22,13 @@ public class PageController {
     private final SubscriptionService subscriptionService;
 
     // ── Home ─────────────────────────────────────────────
-//    @GetMapping("/")
-//    public String home() {
-//        return "index";
-//    }
+    @GetMapping("/")
+    public String home() {
+        return "index";
+    }
 
     // ── Login ────────────────────────────────────────────
-    @GetMapping("/login")
+    @GetMapping("/Login")
     public String loginPage(@RequestParam(required = false) String error,
                             @RequestParam(required = false) String logout,
                             Model model) {
