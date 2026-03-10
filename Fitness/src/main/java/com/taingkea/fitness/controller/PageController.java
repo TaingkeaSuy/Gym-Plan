@@ -24,7 +24,7 @@ public class PageController {
     // ── Home ─────────────────────────────────────────────
     @GetMapping("/")
     public String home() {
-        return "Index";
+        return "Iindex";
     }
 
     // ── Login ────────────────────────────────────────────
