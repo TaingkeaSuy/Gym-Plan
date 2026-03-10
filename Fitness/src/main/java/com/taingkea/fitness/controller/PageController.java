@@ -28,7 +28,7 @@ public class PageController {
     }
 
     // ── Login ────────────────────────────────────────────
-    @GetMapping("/Login")
+    @GetMapping("/login")
     public String loginPage(@RequestParam(required = false) String error,
                             @RequestParam(required = false) String logout,
                             Model model) {
