@@ -22,10 +22,10 @@ public class PageController {
     private final SubscriptionService subscriptionService;
 
     // ── Home ─────────────────────────────────────────────
-    @GetMapping("/")
-    public String home() {
-        return "index";
-    }
+//    @GetMapping("/")
+//    public String home() {
+//        return "index";
+//    }
 
     // ── Login ────────────────────────────────────────────
     @GetMapping("/login")
