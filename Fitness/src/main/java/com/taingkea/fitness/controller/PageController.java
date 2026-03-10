@@ -28,14 +28,14 @@ public class PageController {
     }
 
     // ── Login ────────────────────────────────────────────
-//    @GetMapping("/login")
-//    public String loginPage(@RequestParam(required = false) String error,
-//                            @RequestParam(required = false) String logout,
-//                            Model model) {
-//        if (error  != null) model.addAttribute("error",   "Invalid username or password.");
-//        if (logout != null) model.addAttribute("message", "You have been logged out.");
-//        return "login";
-//    }
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(required = false) String error,
+                            @RequestParam(required = false) String logout,
+                            Model model) {
+        if (error  != null) model.addAttribute("error",   "Invalid username or password.");
+        if (logout != null) model.addAttribute("message", "You have been logged out.");
+        return "login";
+    }
 
     // ── Register ─────────────────────────────────────────
     @GetMapping("/register")
