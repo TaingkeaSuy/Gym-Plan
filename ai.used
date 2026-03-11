@@ -1,4 +1,4 @@
-Ai used: Claude,chatgpt <br>
+Ai used: Claude, ChatGPT
 The Ai used prompt: "Create gym plan management with themlef bootstrap and postgreSQL, feature sign up, log in and managing plans"
 Instead of copying the whole code, i analyzed it and make adjustment to my preference.
-i also used chatgpt to help me fix the bug during deployment. <br>
+i also used chatgpt to help me fix the bug during deployment.
