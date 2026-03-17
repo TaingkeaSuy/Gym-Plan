@@ -79,7 +79,8 @@ If errors occur, they may be caused by dependency or environment differences, so
 Finally, Railway will generate a public domain which can be used to access and test the application.
 </p
 
-<h3>ai declosure</h3>
+### ai declosure
+
 <p>Ai used: Claude, ChatGPT
 The Ai used prompt: "Create gym plan management with themlef bootstrap and postgreSQL, feature sign up, log in and managing plans"
 Instead of copying the whole code, i analyzed it and make adjustment to my preference.
