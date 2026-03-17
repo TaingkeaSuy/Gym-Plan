@@ -79,6 +79,7 @@ If errors occur, they may be caused by dependency or environment differences, so
 Finally, Railway will generate a public domain which can be used to access and test the application.
 </p
 
+</p 
 <h2>ai declosure</h2>
 
 <p>Ai used: Claude, ChatGPT
