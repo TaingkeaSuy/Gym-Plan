@@ -79,10 +79,11 @@ If errors occur, they may be caused by dependency or environment differences, so
 Finally, Railway will generate a public domain which can be used to access and test the application.
 </p
 
-</p 
-<h2>ai declosure</h2>
+</p>
 
-<p>Ai used: Claude, ChatGPT
-The Ai used prompt: "Create gym plan management with themlef bootstrap and postgreSQL, feature sign up, log in and managing plans"
-Instead of copying the whole code, i analyzed it and make adjustment to my preference.
-i also used chatgpt to help me fix the bug during deployment</p>
+<h2>AI Disclosure</h2>
+<p>
+AI used: Claude, ChatGPT  
+The AI used prompt: "Create gym plan management with thymeleaf bootstrap and postgreSQL, feature sign up, log in and managing plans"  
+Instead of copying the whole code, I analyzed it and made adjustments to my preference. I also used ChatGPT to help me fix bugs during deployment.
+</p>
